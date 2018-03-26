@@ -1,0 +1,163 @@
+---
+title: "DATA 608 - Project 1"
+author: "Joshua Sturm"
+date: "02/08/2018"
+output:
+  pdf_document:
+    keep_tex: yes
+  html_document:
+    highlight: pygments
+    theme: cerulean
+    code_folding: show
+    toc: yes
+    toc_float: yes
+    #smart: no
+always_allow_html: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F, cache = T)
+```
+
+```{r load-packages}
+# Load packages
+packages <- c("tidyverse")
+invisible(lapply(packages, library, character.only = T))
+```
+
+**Principles of Data Visualization and Introduction to ggplot2**
+
+I have provided you with data about the 5,000 fastest growing companies in the US, as compiled by Inc. magazine. lets read this in:
+
+```{r}
+
+inc <- read.csv("https://raw.githubusercontent.com/charleyferrari/CUNY_DATA_608/master/module1/Data/inc5000_data.csv", header= TRUE)
+
+```
+
+And lets preview this data:
+
+```{r}
+
+head(inc)
+
+```
+```{r}
+
+summary(inc)
+
+```
+
+Think a bit on what these summaries mean. Use the space below to add some more relevant non-visual exploratory information you think helps you understand this data:
+
+```{r}
+
+glimpse(inc) # View number of rows and columns, variable types
+
+```
+
+## Question 1
+
+Create a graph that shows the distribution of companies in the dataset by State (ie how many are in each state). There are a lot of States, so consider which axis you should use. This visualization is ultimately going to be consumed on a 'portrait' oriented screen (ie taller than wide), which should further guide your layout choices.
+
+### Since we'll be displaying the output on a portrait screen, we want to flip the coordinates, and use the y axis.
+
+```{r}
+
+# Group by state, and take the count
+state.count <- inc %>%
+  count(State)
+
+ggplot(state.count, aes(x=reorder(State, n), y=n)) + 
+  geom_bar(stat="identity", fill="firebrick2", width=0.5) + 
+  coord_flip() +
+  labs(title="Number of companies by State", 
+       subtitle="count vs. State",
+       x = "State",
+       y = "Count") + 
+  theme_grey(base_size = 8) +
+  scale_y_continuous(expand=c(0,0))
+
+```
+
+## Quesiton 2
+
+Lets dig in on the state with the 3rd most companies in the data set. Imagine you work for the state and are interested in how many people are employed by companies in different industries. Create a plot that shows the average and/or median employment by industry for companies in this state (only use cases with full data, use R's `complete.cases()` function.) In addition to this, your graph should show how variable the ranges are, and you should deal with outliers.
+
+```{r}
+inc <- inc[complete.cases(inc),]
+
+find.third.state <- state.count %>%
+  arrange(desc(n))
+find.third.state <- find.third.state$State[[3]]
+
+third.state <- filter(inc, State == find.third.state) %>%
+  filter(complete.cases(.))
+
+third.state.table <- group_by(third.state, Industry) %>%
+  summarize(meanEmployment = mean(Employees),
+            medianEmployment = median(Employees)
+  ) %>%
+  gather(property, count, meanEmployment, medianEmployment)
+
+```
+
+```{r}
+ggplot(third.state.table, aes(x=reorder(Industry, count), y=count)) +
+  geom_bar(stat="identity", position="dodge", aes(fill=property)) +
+  coord_flip() +
+  scale_fill_manual(values=c("lightsteelblue4", "lightsteelblue2"), guide=guide_legend(reverse=T)) +
+  scale_y_continuous(expand=c(0,0))
+```
+
+`Business Products & Services` appears to be an outlier. If we check the average difference between industry means, we can somewhat regulate the outlier.
+
+```{r}
+state.outlier <- third.state.table %>%
+  filter(property == "meanEmployment")
+state.outlier <- state.outlier[-c(2),] # drop the outlier
+mean(diff(sort(state.outlier$count))) # calculate the average difference 
+max(diff(sort(state.outlier$count)))
+```
+
+We see the average difference between consecutive leading industries is 26.49105, with a max of 191.6224.
+With this in mind, I think we can cap the outlier at ~200 more than the second-highest.
+
+```{r}
+third.state.edited <- third.state.table
+third.state.edited[2,3] <- 815
+ggplot(third.state.edited, aes(x=reorder(Industry, count), y=count)) +
+  geom_bar(stat="identity", position="dodge", aes(fill=property)) +
+  coord_flip() +
+  scale_fill_manual(values=c("lightsteelblue4", "lightsteelblue2"), guide=guide_legend(reverse=T)) +
+  scale_y_continuous(expand=c(0,0))
+```
+
+## Question 3
+
+Now imagine you work for an investor and want to see which industries generate the most revenue per employee. Create a chart that makes this information clear. Once again, the distribution per industry should be shown.
+
+```{r}
+
+most.profitable <- inc %>%
+  group_by(Industry) %>%
+  summarize(rpe = sum(Revenue)/sum(Employees))
+  
+ggplot(most.profitable, aes(x=reorder(Industry, rpe), y=rpe)) +
+  geom_bar(stat="identity", colour="slategrey") +
+  coord_flip()
+```
+
+Once again, we have an outlier; in this case, it's `Computer Hardware`. Using the same method as in problem 2, we'll cap the outlier.
+
+```{r}
+mp.edited <- most.profitable
+mean(diff(sort(mp.edited$rpe)))
+max(diff(sort(mp.edited$rpe)))
+mp.edited[3,2] <- 600000
+
+ggplot(mp.edited, aes(x=reorder(Industry, rpe), y=rpe)) +
+  geom_bar(stat="identity", colour="slategrey") +
+  coord_flip()
+```
+
