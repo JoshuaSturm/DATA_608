@@ -1,0 +1,133 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={DATA 608 - Final Project Proposal},
+            pdfauthor={Joshua Sturm},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{DATA 608 - Final Project Proposal}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Joshua Sturm}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{03/27/2018}
+
+
+\begin{document}
+\maketitle
+
+\subsection{Mission Statement}\label{mission-statement}
+
+My goal is to explore the prevalence of obesity amongst adults in the
+United States, by county. I intend to find if there is any correlation
+between being overweight and other factors, such as economical
+(percentage of population living below the federal poverty level), and
+educational (highest level of schooling completed).
+
+According to the
+\href{https://www.cdc.gov/obesity/adult/causes.html}{Centers for Disease
+Control and Prevention}, the annual nationwide productive costs of
+obesity obesity-related absenteeism range between \$3.38 billion (\$79
+per obese individual) and \$6.38 billion (\$132 per obese individual).
+There are incalculable economical impacts on the healthcare industry.
+Many citizens are unable to join the army due to being unable to pass
+the physical exams.
+
+Clearly, obesity impacts not just the sufferers, but other Americans as
+well. Population percentage with obesity rises each year. We need to
+find better ways to prevent, treat, and rid obesity from our population.
+
+\subsection{Data}\label{data}
+
+I will source the data from several different datasets.
+
+\begin{itemize}
+\tightlist
+\item
+  \href{https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml}{American
+  FactFinder}
+\item
+  \href{https://www.cdc.gov/diabetes/data/countydata/countydataindicators.html}{Centers
+  for Disease Control and Prevention}
+\end{itemize}
+
+\subsection{Tools}\label{tools}
+
+I haven't yet decided how I will present this project. I would like to
+make it interactive, e.g.~a Shiny app, but I don't yet know if it's
+feasible, given the number of variables. As I explore the data more, I
+will finalize my plan.
+
+
+\end{document}

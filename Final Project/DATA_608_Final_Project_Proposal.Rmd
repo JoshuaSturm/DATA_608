@@ -1,0 +1,34 @@
+---
+title: "DATA 608 - Final Project Proposal"
+author: "Joshua Sturm"
+date: "03/27/2018"
+output:
+  pdf_document:
+    keep_tex: yes
+  word_document:
+    toc: yes
+  html_document:
+    code_folding: show
+    highlight: pygments
+    smart: no
+    theme: cerulean
+    toc: yes
+    toc_float: yes
+always_allow_html: yes
+---
+
+## Mission Statement
+My goal is to explore the prevalence of obesity amongst adults in the United States, by county. I intend to find if there is any correlation between being overweight and other factors, such as economical (percentage of population living below the federal poverty level), and educational (highest level of schooling completed).
+
+According to the [Centers for Disease Control and Prevention](https://www.cdc.gov/obesity/adult/causes.html), the annual nationwide productive costs of obesity obesity-related absenteeism range between \$3.38 billion (\$79 per obese individual) and \$6.38 billion (\$132 per obese individual). There are incalculable economical impacts on the healthcare industry. Many citizens are unable to join the army due to being unable to pass the physical exams.
+
+Clearly, obesity impacts not just the sufferers, but other Americans as well. Population percentage with obesity rises each year. We need to find better ways to prevent, treat, and rid obesity from our population.
+
+## Data
+I will source the data from several different datasets.
+
+- [American FactFinder](https://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml)
+- [Centers for Disease Control and Prevention](https://www.cdc.gov/diabetes/data/countydata/countydataindicators.html)
+
+## Tools
+I haven't yet decided how I will present this project. I would like to make it interactive, e.g. a Shiny app, but I don't yet know if it's feasible, given the number of variables. As I explore the data more, I will finalize my plan.
