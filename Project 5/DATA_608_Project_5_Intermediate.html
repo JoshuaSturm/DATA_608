@@ -1,0 +1,229 @@
+<html>
+
+<!--
+    
+Joshua Sturm
+DATA 608 - Project 5
+Intermediate Javascript
+04/08/2018
+
+-->
+
+<head>
+    <title>DATA 608 - Project 5</title>
+
+    <!-- D3 CDN -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <!-- JQuery CDN -->
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+  integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+  crossorigin="anonymous"></script>
+
+    <!-- Table Styling with CSS -->
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: center;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+
+<body>
+    
+<h1>Intermediate JavaScript</h1>
+
+<h2>Part 1 - Displaying Data in a Table</h2>
+
+<!--
+
+Write a function to load the presidents.csv data and display the data as an html table (you
+may use a csv parser from any available library, though I encourage you to try the d3 one).
+
+-->
+
+<p>Click the button to read in 'presidents.csv', and tabulate the data</p>
+
+<form name="importCSV">
+    <input type="button" value="Import CSV" onClick="importCsv()">
+    <input type="reset" value="Reset" onClick="clearTable()">
+</form>
+
+<p id="presTable"></p>
+
+<script type="text/JavaScript">
+
+function tabulate(data, columns) {
+    d3.select('#presTable').selectAll("table").remove()
+    var table = d3.select('#presTable').append('table')
+    var thead = table.append('thead')
+    var tbody = table.append('tbody');
+
+    thead.append('tr')
+        .selectAll('th')
+        .data(columns)
+        .enter()
+        .append('th')
+            .text(function (column) { return column; });
+
+    var rows = tbody.selectAll('tr')
+        .data(data)
+        .enter()
+        .append('tr');
+
+    var cells = rows.selectAll('td')
+        .data(function(row) {
+            return columns.map(function (column) {
+                return { column: column, value: row[column] };
+            });
+        })
+        .enter()
+        .append('td')
+            .text(function (d) { return d.value; });
+    return table;
+}
+
+function importCsv(){
+    d3.csv('./data/presidents.csv').then(function (data) {
+    // If not running locally, comment out the above line, and uncomment the one below
+    // d3.csv('https://raw.githubusercontent.com/JoshuaSturm/DATA_608/master/Project%205/data/presidents.csv').then(function (data) {
+        var columns = ['Name','Height','Weight'];
+        tabulate(data, columns);
+    }).catch(err => alert(err));
+}
+
+function clearTable(){
+    d3.select('#presTable').selectAll("table").remove()
+}
+
+</script>
+<!-- End Part 1-->
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<h2>Part 2 - Filtering by President</h2>
+
+<!--
+
+Now that you have the presidents data loaded, write a function that will return that
+president’s height & weight when you type it in. This can be typed into either an input box or
+an alert box, and then print the result in a box or on the webpage.
+
+-->
+
+<label for="presInput">Choose a President:</label>
+<input list="presidents" id="presInput" name="presInput" oninput="presChoice()" />
+<input type="reset" value="Reset" id="resetButton" onClick="clearPres()">
+<datalist id="presidents">
+</datalist>
+
+<p id="presOutput"></p>
+
+<script type="text/JavaScript">
+
+// Declare global variable to be used in different functions
+var presData;
+
+// Load the data, store the names in an array, and loop through them,
+// to add them to the HTML5 datalist (for autosuggest)
+
+d3.csv('./data/presidents.csv').then(function (data){
+    presData = data;
+    presChoice(presData);
+    var namesArray = data.map(function(d) { return d.Name });
+    var options = '';
+    for (var i = 0; i < namesArray.length; i++)
+        options += '<option value="'+ namesArray[i]+'" />';
+    document.getElementById('presidents').innerHTML = options;
+});
+
+// Function to subset and tabulate data based on selected choice
+
+function presChoice() {
+    d3.select('#presOutput').selectAll("table").remove()
+    var val = document.getElementById("presInput").value;
+    var opts = document.getElementById('presidents').childNodes;
+    for (var i = 0; i < opts.length; i++) {
+      if (opts[i].value === val) {
+        // An item was selected from the list!
+        // yourCallbackHere()
+        //alert(opts[i].value);
+        var table = d3.select('#presOutput').append('table')
+        var thead = table.append('thead');
+        var tbody = table.append('tbody');
+        var columns = ['Name', 'Height', 'Weight'];
+
+
+        thead.append('tr')
+            .selectAll('th')
+            .data(columns)
+            .enter()
+            .append('th')
+                .text(function (column) { return column; });
+
+        var rows = tbody.selectAll('tr')
+            .data(presData)
+            .enter()
+            .append('tr')
+            .filter(function(d) { return d.Name == opts[i].value });
+
+        var cells = rows.selectAll('td')
+            .data(function(row) {
+                return columns.map(function (column) {
+                    return { column: column, value: row[column] };
+                });
+            })
+            .enter()
+            .append('td')
+                .text(function (d) { return d.value; });
+        return table;
+    };
+    };
+};
+
+// I don't know of any way to clear the datalist input with
+// vanilla HTML or JavaScript, so I used JQuery
+
+function clearPres() {
+    d3.select('#presOutput').selectAll("table").remove();
+    $('input[name=presInput]').focusin(function() {
+        $('input[name=presInput]').val('');
+    });
+    $('#resetButton').click(function() {
+        $('input[name=presInput]').val('');
+    });
+}
+$(document).ready(clearPres);
+
+</script>
+<!-- End Part 2 -->
+
+
+</body>
+</html>
+
+<!-- References:
+    http://learnjsdata.com/read_data.html
+    http://bl.ocks.org/ndarville/7075823
+    https://stackoverflow.com/questions/9268645/creating-a-table-linked-to-a-csv-file
+    https://github.com/d3/d3/blob/master/CHANGES.md <---- wasted two days only to find that it was due to a change in v5
+    https://developer.mozilla.org/en-US/docs/Web/HTML/Element/datalist
+    https://stackoverflow.com/questions/42243458/d3-loading-in-csv-file-then-using-only-specific-columns
+    Interactive Data Visualization for the Web, 2nd Edition
+    https://stackoverflow.com/questions/37478727/how-can-i-make-a-browser-display-all-datalist-options-when-a-default-value-is-se
+-->

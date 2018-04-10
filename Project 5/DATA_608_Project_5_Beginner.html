@@ -1,0 +1,155 @@
+<html>
+
+<!--
+    
+Joshua Sturm
+DATA 608 - Project 5
+Beginner Javascript
+04/08/2018
+
+-->
+
+<head>
+    <title>DATA 608 - Project 5</title> 
+
+    <!-- Style Table with CSS -->
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+    <!-- End Table CSS -->
+</head>
+
+<body>
+    
+<h1>Beginner JavaScript</h1>
+
+<!--
+
+Create a function to reverse any word that you type in. This can be typed into either an input
+box or an alert box, and then print the result in a box or on the webpage.
+
+Note: When researching how to approach this problem, I discovered that JavaScript has built-in
+functions to reverse (input) strings, but I'm assuming we're not supposed to use those, so I'll
+create a function that loops through the string, printing in reverse.
+
+-->
+
+<h2>Part 1 - Reversing string input</h2>
+
+<script type="text/JavaScript">
+
+document.write('<p>Enter a string into the input box</p><br>');
+
+</script>
+
+<form name="reverseStringForm">
+    <input id="stringInput" type="text" size="15">
+    <input type="button" value="Reverse" onClick="reverseString()">
+</form>
+
+<p id="reverseOutput"></p>
+
+<!-- End Part 1-->
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<h2>Part 2 - Print Multiples in Tabular Form</h2>
+
+<!--
+
+Create a function that takes an input number, and prints a table with the first 20 multiples of
+the number, in order 5x4
+
+-->
+
+<p>Enter a number in \(\Bbb{R}\)</p>
+
+<form name="multipleForm">
+    <input id="numberInput" type="number" size="15">
+    <input type="button" value="Multiples" onClick="tabulateMultiples()">
+</form>
+
+<p id="multipleTable"></p>
+
+<!-- End Part 2 -->
+
+
+
+<!-- Functions -->
+<script type="text/Javascript">
+function reverseString(){
+    var inputString, inReverse, i, reversedString;
+
+    // Get the value of the input field with id="reverseString"
+    inputString = document.getElementById("stringInput").value;
+
+    inReverse = "";
+    // Loop through the string
+    for (i = inputString.length - 1; i >= 0; i--){
+        inReverse += inputString[i];
+    }
+
+    reversedString = inputString + " <--Reversed--> " + inReverse;
+
+    //return(reversedString)
+    document.getElementById("reverseOutput").innerHTML = reversedString;
+}
+
+function tabulateMultiples(){
+    var inputNumber, multiples, i, multiplesTable;
+
+    // Get the number for the input field with id="numberInput"
+    inputNumber = document.getElementById("numberInput").value;
+
+    multiplesTable = "";
+
+    for (i = 0; i < 20; i++){
+        multiples = (i+1)*inputNumber;
+        switch(i % 4){
+            case (0):
+                multiplesTable += "<tr><td>" + multiples + "</td>";
+                break;
+            case (3):
+                multiplesTable += "<td>" + multiples + "</td></tr>";
+                break;
+            default:
+                multiplesTable += "<td>" + multiples + "</td>";    
+        }
+    }
+
+    //return(multipleTable)
+    document.getElementById("multipleTable").innerHTML = "<table>" + multiplesTable + "</table>";
+}
+
+</script>
+<!-- End Functions -->
+
+<!-- Mathjax CDN -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+
+</body>
+</html>
+
+<!-- References:
+    https://www.w3schools.com/js/js_validation.asp
+    https://www.w3schools.com/js/js_arrays.asp
+    https://www.w3schools.com/html/html_tables.asp
+-->
