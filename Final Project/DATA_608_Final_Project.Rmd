@@ -1,0 +1,51 @@
+---
+title: "DATA_608_Final_Project"
+author: "Joshua Sturm"
+date: "May 1, 2018"
+output:
+  github_document:
+  html_document:
+    highlight: textmate
+    theme: sandstone
+    code_folding: show
+    toc: yes
+    toc_float: yes
+    smart: yes
+  pdf_document:
+    keep_tex: yes
+always_allow_html: yes
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F, collapse = T)
+setwd("~/GitHub/DATA_608/Final Project")
+```
+
+```{r load-libraries}
+library(tidyverse)
+library(magrittr)
+```
+
+```{r import-bysex, cache = T}
+bySex <- read.csv("./data/OB_PREV_by_sex_ALL_STATES.csv", na.strings = c("", "NA", "NaN", "No Data"), header = T)
+
+# Any row that has an NA is missing the entire row, so we can safely remove those
+bySex <- bySex[complete.cases(bySex),]
+
+colnames(bySex) <- c("State", "FIPS_Codes", "County",
+                     "numberMen", "percentMen", "lowerConfIntMen",
+                     "upperConfIntMen", "ageAdjPercMen", "ageAdjLowerConfIntMen",
+                     "ageAdjUpperConfIntMen", "numberWomen", "percentWomen",
+                     "lowerConfIntWomen", "upperConfIntWomen", "ageAdjPercWomen",
+                     "ageAdjLowerConfIntWomen", "ageAdjUpperConfIntWomen", "Year")
+# write.csv(bySex, "bySex_all_states.csv")
+```
+
+```{r fix-2009}
+acs09 <- read.csv("./data/ACS_09_1YR_S1701_with_ann.csv", na.strings = c("", "NA", "NaN"))
+
+```
+
+
