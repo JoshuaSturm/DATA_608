@@ -1,0 +1,148 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
+\hypersetup{unicode=true,
+            pdftitle={DATA\_608\_Final\_Project},
+            pdfauthor={Joshua Sturm},
+            colorlinks=true,
+            linkcolor=Maroon,
+            citecolor=Blue,
+            urlcolor=blue,
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{DATA\_608\_Final\_Project}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Joshua Sturm}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{May 1, 2018}
+
+
+\begin{document}
+\maketitle
+
+As can be seen in the source files, I originally used multiple files to
+get all the information I wanted, before finding a
+\href{https://factfinder.census.gov/faces/tableservices/jsf/pages/productview.xhtml?pid=ACS_16_1YR_S1703\&prodType=table}{different
+source} that had all of it contained in a single table. I included the
+years 2010 through 2016.
+
+Due to storage and memory constraints, I had to limit which columns I
+could use. I tried to choose those which I believed to provide the
+greatest insight. I did some basic tidying in Excel (such as removing /
+renaming columns) before loading the file to work with in javascript.
+
+Since my only knowledge of javascript comes from this course, the next
+part took the bulk of my time. I first tried working directly with my
+data, before learning that I had to convert each column. I tried for
+hours to loop through all columns to convert automatically, but when
+nothing worked, I gave up and did each variable manually.
+
+Once I finally got the file loaded with d3, I ran into several problems
+with crossfilter. After toiling for \emph{days}, I learned that
+crossfilter only accepts ``long'' data, and my file was wide. Through
+StackOverflow, I learned of something called melt.js, and finally I was
+able to get crossfilter working - for a single variable. I still haven't
+figured out how to filter a column in d3/crossfilter - or if it's even
+possible.
+
+Finally, I resorted to importing my file into R, and melting the entire
+file\ldots{}multiple times. My reasoning was that I wanted each variable
+to have its own column and corresponding ``count'' column. There is most
+likely a better way to do this, but I haven't yet found one. The
+consequence of doing it this way was that each variable was repeated
+numerous times, and so the crossfilter output was really a multiple of
+the true values. Using R and Excel, I found out what that multiple was
+(it was different for each column), and divided by that. The numbers
+were now close to the real values, although they were in decimal format.
+When trying to round to an integer, I was getting large errors, which I
+assume is due to floating point arithmetic error.
+
+The end result is that the dashboard\ldots{}works. The file is quite
+large, so it takes \textasciitilde{}10 seconds to load, but once it's
+committed to memory, crossfilter works \emph{really} quickly; the
+calculations and transitions are near instantaneous. If I had more time,
+I would further enhance the display with CSS, but I fixed the position
+of a few graphs to make sure none of them overlap.
+
+I could have made a really nice app in Plotly or Shiny in a fraction of
+the time (I spent 60+ hours on this project), but I wanted to take on
+this challenge. Upon completion of this project, and with a working
+demo, I am glad that I took the more difficult route. I may have missed
+a few deadlines because of it, but I learned so much from this struggle,
+that it made it all worthwhile.
+
+Thank you, Professor Ferrari, for an amazing and educational semester!
+
+
+\end{document}
